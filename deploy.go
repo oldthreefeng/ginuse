@@ -32,6 +32,10 @@ func gitPush(c *gin.Context) {
 		return
 	}
 	fmt.Println("Signatures is matched ~")
+<<<<<<< HEAD
+=======
+	//return 200 first
+>>>>>>> cd80597b9f855debf5ec80f2d613781c0a773ee5
 	c.String(http.StatusOK, "OK")
 	ReLaunch()
 }
