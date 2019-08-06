@@ -7,8 +7,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 )
 
@@ -16,10 +18,10 @@ var (
 	secret string
 	port   string
 	path   string
-	shell    string
+	shell  string
 )
 
-//签名对了才能执行Relaunch
+// return true then deploy
 func gitPush(c *gin.Context) {
 	matched, _ := verifySignature(c)
 	if !matched {
@@ -33,7 +35,7 @@ func gitPush(c *gin.Context) {
 	c.String(http.StatusOK, "OK")
 }
 
-// 执行部署脚本
+// execute the shell scripts
 func ReLaunch() {
 	cmd := exec.Command("sh", shell)
 	err := cmd.Start()
@@ -43,13 +45,13 @@ func ReLaunch() {
 	err = cmd.Wait()
 }
 
-// 验证签名
+// verifySignature
 func verifySignature(c *gin.Context) (bool, error) {
 	PayloadBody, err := c.GetRawData()
 	if err != nil {
 		return false, err
 	}
-	// 获取请求头的签名信息
+	// Get Header with X-Hub-Signature
 	XHubSignature := c.GetHeader("X-Hub-Signature")
 	signature := getSha1Code(PayloadBody)
 	fmt.Println(signature)
@@ -70,6 +72,14 @@ func main() {
 	flag.StringVar(&path, "path", "/deploy/wiki", "url serve path")
 	flag.StringVar(&shell, "sh", "/app/wiki.sh", "deploy shell scritpt")
 	flag.Parse()
+
+	// Disable Console Color, you don't need console color when writing the logs to file
+	gin.DisableConsoleColor()
+	// Logging to a file.
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
+	// Use the following code if you need to write the logs to file and console at the same time.
+	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 
 	router := gin.Default()
 	router.GET(path, gitPush)
