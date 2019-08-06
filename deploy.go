@@ -19,6 +19,7 @@ var (
 	port   string
 	path   string
 	shell  string
+	h      bool
 )
 
 // return true then deploy
@@ -65,14 +66,31 @@ func getSha1Code(payloadBody []byte) string {
 	return "sha1=" + hex.EncodeToString(h.Sum(nil))
 }
 
-func main() {
+func usage()  {
+	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.0.5
+Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
+
+Options:
+`)
+	flag.PrintDefaults()
+}
+
+func init() {
 	// use flag to change args
 	flag.StringVar(&port, "p", "8000", "listen and serve port")
 	flag.StringVar(&secret, "pwd", "hongfeng", "deploy password")
-	flag.StringVar(&path, "path", "/deploy/wiki", "url serve path")
+	flag.StringVar(&path, "path", "/deploy/wiki", "uri serve path")
 	flag.StringVar(&shell, "sh", "/app/wiki.sh", "deploy shell scritpt")
+	flag.BoolVar(&h, "h", false, "show this help")
+	flag.Usage = usage
+}
+
+func main() {
 	flag.Parse()
 
+	if h {
+		flag.Usage()
+	}
 	// Disable Console Color, you don't need console color when writing the logs to file
 	gin.DisableConsoleColor()
 	// Logging to a file.
