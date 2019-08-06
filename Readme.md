@@ -35,4 +35,8 @@ autoDeploy your project.
  
 ```
 
+- 验证
+
+![verify](./images/respone.jpg)
+
 练手的go项目,学习golang15天~

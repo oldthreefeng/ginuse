@@ -32,8 +32,9 @@ func gitPush(c *gin.Context) {
 		return
 	}
 	fmt.Println("Signatures is matched ~")
-	ReLaunch()
+	//return 200 first
 	c.String(http.StatusOK, "OK")
+	ReLaunch()
 }
 
 // execute the shell scripts
