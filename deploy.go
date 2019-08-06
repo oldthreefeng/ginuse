@@ -15,6 +15,8 @@ import (
 var (
 	secret string
 	port   string
+	path   string
+	shell    string
 )
 
 //签名对了才能执行Relaunch
@@ -33,7 +35,7 @@ func gitPush(c *gin.Context) {
 
 // 执行部署脚本
 func ReLaunch() {
-	cmd := exec.Command("sh", "/app/wiki.sh")
+	cmd := exec.Command("sh", shell)
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err.Error())
@@ -49,12 +51,13 @@ func verifySignature(c *gin.Context) (bool, error) {
 	}
 	// 获取请求头的签名信息
 	XHubSignature := c.GetHeader("X-Hub-Signature")
-	signature := MySha1(PayloadBody)
+	signature := getSha1Code(PayloadBody)
+	fmt.Println(signature)
 	return XHubSignature == signature, nil
 }
 
 // hmac-sha1
-func MySha1(payloadBody []byte) string {
+func getSha1Code(payloadBody []byte) string {
 	h := hmac.New(sha1.New, []byte(secret))
 	h.Write(payloadBody)
 	return "sha1=" + hex.EncodeToString(h.Sum(nil))
@@ -62,12 +65,13 @@ func MySha1(payloadBody []byte) string {
 
 func main() {
 	// use flag to change args
-	flag.StringVar(&port, "p", "8000", "listen and sever port")
-	flag.StringVar(&secret, "p", "hongfeng", "deploy password")
+	flag.StringVar(&port, "p", "8000", "listen and serve port")
+	flag.StringVar(&secret, "pwd", "hongfeng", "deploy password")
+	flag.StringVar(&path, "path", "/deploy/wiki", "url serve path")
+	flag.StringVar(&shell, "sh", "/app/wiki.sh", "deploy shell scritpt")
 	flag.Parse()
 
 	router := gin.Default()
-	router.GET("/deploy/wiki", gitPush)
+	router.GET(path, gitPush)
 	_ = router.Run(":" + port)
 }
-
