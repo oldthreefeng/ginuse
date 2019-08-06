@@ -4,6 +4,6 @@ services:
     image: louisehong/deploy:1.0.4
     restart: always
     volumes:
-      - "/data/logs/gin:/app/logs"
+      - "/data/logs/gin:/logs"
     ports:
       - "8000:8000"
