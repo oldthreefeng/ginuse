@@ -26,17 +26,83 @@ autoDeploy your project.
 
 - X-Hub-Signature
 
-是对Payload计算得出的签名。当我们在前面的配置中输入了"Secret"后，Header中才会出现此项。官方文档对Secret作了详细说明，后面我们也会在代码中实现对它的校验
+是对Payload计算得出的签名。当我们在前面的配置中输入了"Secret"后，Header中才会出现此项。官方文档对Secret作了详细说明
 
 ```cgo
 1. 监听端口port:8000,监听的uri路径path,运行部署脚本sh,webhook的secret,
 2. 使用-p 指定端口,使用-path 指定uri路径,使用-sh 指定运行脚本, 使用-s 指定密码,
 3. 原理是通过webhook的Post,来校验sha1,通过校验则执行部署脚本
- 
 ```
 
 - 验证
 
 ![verify](./images/respone.jpg)
+
+## 普通部署
+
+- 下载项目
+
+```shell
+$ git clone  https://github.com/oldthreefeng/ginuse.git
+$ cd ginuse
+```
+
+- 编译项目
+
+```shell
+$ go build deploy.go
+$ deploy -h
+deploy version: deploy:1.0.5
+Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
+
+Options:
+  -h	show this help
+  -p string
+    	listen and serve port (default "8000")
+  -path string
+    	uri serve path (default "/deploy/wiki")
+  -pwd string
+    	deploy password (default "hongfeng")
+  -sh string
+    	deploy shell scritpt (default "/app/wiki.sh")
+```
+
+- 运行项目
+
+```shell
+./deploy
+```
+
+## 使用docker部署
+
+- 下载项目
+
+```shell
+$ git clone  https://github.com/oldthreefeng/ginuse.git
+$ cd ginuse
+```
+
+- 更改volume
+
+```shell
+$ vi docker-compose.yml
+version: "3.0"
+services:
+  deploy:
+    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.0.9
+    restart: always
+    volumes:
+      - "/data/logs/gin:/logs"   ## gin的访问日志
+      - "/app/:/app/"            ## 主机的项目地址挂载至容器
+    ports:
+      - "8000:8000"
+
+```
+
+- 启动项目
+
+```shell
+docker-compose up -d
+```
 
 练手的go项目,学习golang15天~
