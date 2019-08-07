@@ -16,6 +16,6 @@ FROM alpine:3.7
 RUN apk add tzdata ca-certificates && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && apk del tzdata && rm -rf /var/cache/apk/*
-COPY --from=builder /deploy /app/deploy
-ENTRYPOINT ["/app/deploy"]
+COPY --from=builder /deploy /bin/deploy
+ENTRYPOINT ["/bin/deploy"]
 

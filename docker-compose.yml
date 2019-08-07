@@ -1,9 +1,11 @@
+# docker-compose up -d --force-recreate
 version: "3.0"
 services:
   deploy:
-    image: louisehong/deploy:1.0.8
+    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.0.9
     restart: always
     volumes:
       - "/data/logs/gin:/logs"
+      - "/app/:/app/"
     ports:
       - "8000:8000"
