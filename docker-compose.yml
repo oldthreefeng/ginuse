@@ -2,10 +2,10 @@
 version: "3.0"
 services:
   deploy:
-    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.0.9
+    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.1.0
     restart: always
     volumes:
       - "/data/logs/gin:/logs"
-      - "/app/:/app/"
+      - "/app/:/data/"
     ports:
       - "8000:8000"

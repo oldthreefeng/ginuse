@@ -15,7 +15,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -ldflags="-w -s" 
 FROM alpine:3.7
 RUN apk add tzdata ca-certificates && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && apk del tzdata && rm -rf /var/cache/apk/*
+    && apk del tzdata && rm -rf /var/cache/apk/* \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk add --no-cache git
 COPY --from=builder /deploy /bin/deploy
 ENTRYPOINT ["/bin/deploy"]
 

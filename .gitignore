@@ -16,3 +16,4 @@
 bin/*
 config.json
 logs
+deploy

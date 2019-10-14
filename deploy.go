@@ -88,7 +88,7 @@ func init() {
 	flag.StringVar(&port, "p", "8000", "listen and serve port")
 	flag.StringVar(&secret, "pwd", "hongfeng", "deploy password")
 	flag.StringVar(&path, "path", "/deploy/wiki", "uri serve path")
-	flag.StringVar(&shell, "sh", "/app/wiki.sh", "deploy shell scritpt")
+	flag.StringVar(&shell, "sh", "/data/w.sh", "deploy shell scritpt")
 	flag.BoolVar(&h, "h", false, "show this help")
 	flag.Usage = usage
 }
@@ -103,7 +103,7 @@ func main() {
 	// Disable Console Color, you don't need console color when writing the logs to file
 	gin.DisableConsoleColor()
 	// Logging to a file.
-	f, _ := os.Create("/logs/gin.log")
+	f, _ := os.Create("logs/gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 	// Use the following code if you need to write the logs to file and console at the same time.
 	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)

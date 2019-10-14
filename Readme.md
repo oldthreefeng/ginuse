@@ -89,11 +89,11 @@ $ vi docker-compose.yml
 version: "3.0"
 services:
   deploy:
-    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.0.9
+    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.1.0
     restart: always
     volumes:
       - "/data/logs/gin:/logs"   ## gin的访问日志
-      - "/app/:/app/"            ## 主机的项目地址挂载至容器
+      - "/app/:/data/"            ## 主机的项目地址挂载至容器
     ports:
       - "8000:8000"
 
