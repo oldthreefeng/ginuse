@@ -6,6 +6,6 @@ services:
     restart: always
     volumes:
       - "/data/logs/gin:/logs"
-      - "/app/:/data/"
+      - "/data/:/app/"
     ports:
       - "8000:8000"
