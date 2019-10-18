@@ -52,7 +52,7 @@ $ cd ginuse
 ```shell
 $ go build deploy.go
 $ deploy -h
-deploy version: deploy:1.0.5
+deploy version: deploy:1.1.16
 Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
 
 Options:
@@ -64,7 +64,7 @@ Options:
   -pwd string
     	deploy password (default "hongfeng")
   -sh string
-    	deploy shell scritpt (default "/app/wiki.sh")
+    	deploy shell scritpt (default "/app/w.sh")
 ```
 
 - 运行项目
@@ -93,7 +93,7 @@ services:
     restart: always
     volumes:
       - "/data/logs/gin:/logs"   ## gin的访问日志
-      - "/app/:/data/"            ## 主机的项目地址挂载至容器
+      - "/data/:/app/"            ## 主机的项目地址挂载至容器
     ports:
       - "8000:8000"
 

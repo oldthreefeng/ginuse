@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 var (
@@ -68,7 +69,7 @@ func getSha1Code(payloadBody []byte) string {
 }
 
 func usage() {
-	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.0.9
+	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.1.16
 Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
 
 Options:
@@ -102,7 +103,16 @@ func main() {
 	// Disable Console Color, you don't need console color when writing the logs to file
 	gin.DisableConsoleColor()
 	// Logging to a file.
-	f, _ := os.Create("/logs/gin.log")
+	var f *os.File
+	switch runtime.GOOS {
+	case "linux":
+		f, _ = os.Create("/logs/gin.log")
+	case "windows":
+		f, _ = os.Create("logs/gin.log")
+	default:
+		f, _ = os.Create("/logs/gin.log")
+	}
+
 	gin.DefaultWriter = io.MultiWriter(f)
 	// Use the following code if you need to write the logs to file and console at the same time.
 	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
