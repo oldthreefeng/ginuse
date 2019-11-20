@@ -69,7 +69,7 @@ func getSha1Code(payloadBody []byte) string {
 }
 
 func usage() {
-	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.1.16
+	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.1.18
 Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
 
 Options:
