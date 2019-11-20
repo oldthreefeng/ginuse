@@ -2,7 +2,7 @@
 version: "3.0"
 services:
   deploy:
-    image: registry-vpc.cn-shanghai.aliyuncs.com/louisehong/deploy:1.1.6
+    image: louisehong/deploy:latest
     restart: always
     volumes:
       - "/data/logs/gin:/logs"
