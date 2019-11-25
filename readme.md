@@ -107,5 +107,5 @@ docker-compose up -d
 
 练手的go项目,学习golang15天~
 
-![](https://www.jetbrains.com/company/press/#images-logos)
+![](https://www.jetbrains.com/company/brand/img/jetbrains_logo.png)
 [jetbrains](https://www.jetbrains.com/?from=ginuse)
