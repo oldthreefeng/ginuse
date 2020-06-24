@@ -38,6 +38,12 @@ func gitPush(c *gin.Context) {
 	ReLaunch()
 }
 
+// aliyun code
+func gitPushCode(c *gin.Context)  {
+	c.String(http.StatusOK, "ok")
+	ReLaunch()
+}
+
 // execute the shell scripts
 func ReLaunch() {
 	cmd := exec.Command("sh", shell)
@@ -120,5 +126,6 @@ func main() {
 	router := gin.Default()
 	router.GET("/", defaultPage)
 	router.POST(path, gitPush)
+	router.POST("/aliyun/code", gitPushCode)
 	_ = router.Run(":" + port)
 }
