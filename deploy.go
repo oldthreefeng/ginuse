@@ -35,18 +35,18 @@ func gitPush(c *gin.Context) {
 	fmt.Println("Signatures is matched ~")
 	//return 200 first
 	c.String(http.StatusOK, "OK")
-	ReLaunch()
+	ReLaunch(shell)
 }
 
 // aliyun code
 func gitPushCode(c *gin.Context)  {
 	c.String(http.StatusOK, "ok")
-	ReLaunch()
+	ReLaunch("/app/images.sh")
 }
 
 // execute the shell scripts
-func ReLaunch() {
-	cmd := exec.Command("sh", shell)
+func ReLaunch(cmdStr string) {
+	cmd := exec.Command("sh", cmdStr)
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err.Error())
@@ -75,7 +75,7 @@ func getSha1Code(payloadBody []byte) string {
 }
 
 func usage() {
-	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.1.18
+	_, _ = fmt.Fprintf(os.Stderr, `deploy version: deploy:1.1.19
 Usage: deploy [-p port] [-path UriPath] [-sh DeployShell] [-pwd WebhookSecret]
 
 Options:
