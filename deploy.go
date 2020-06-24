@@ -7,12 +7,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"runtime"
 )
 
 var (
@@ -29,17 +28,17 @@ func gitPush(c *gin.Context) {
 	if !matched {
 		err := "Signatures did not match"
 		c.String(http.StatusForbidden, err)
-		fmt.Println(err)
+		log.Warn(err)
 		return
 	}
-	fmt.Println("Signatures is matched ~")
+	log.Info("Signatures is matched ~")
 	//return 200 first
 	c.String(http.StatusOK, "OK")
 	ReLaunch(shell)
 }
 
 // aliyun code
-func gitPushCode(c *gin.Context)  {
+func gitPushCode(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
 	ReLaunch("/app/images.sh")
 }
@@ -63,7 +62,7 @@ func VerifySignature(c *gin.Context) (bool, error) {
 	// Get Header with X-Hub-Signature
 	XHubSignature := c.GetHeader("X-Hub-Signature")
 	signature := getSha1Code(PayloadBody)
-	fmt.Println(signature)
+	log.Info(signature)
 	return XHubSignature == signature, nil
 }
 
@@ -110,15 +109,7 @@ func main() {
 	gin.DisableConsoleColor()
 	// Logging to a file.
 	var f *os.File
-	switch runtime.GOOS {
-	case "linux":
-		f, _ = os.Create("/logs/gin.log")
-	case "windows":
-		f, _ = os.Create("logs/gin.log")
-	default:
-		f, _ = os.Create("/logs/gin.log")
-	}
-
+	f, _ = os.OpenFile("logs/gin.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	gin.DefaultWriter = io.MultiWriter(f)
 	// Use the following code if you need to write the logs to file and console at the same time.
 	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
