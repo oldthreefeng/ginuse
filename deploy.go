@@ -92,7 +92,7 @@ func init() {
 	// use flag to change args
 	flag.StringVar(&port, "p", "8000", "listen and serve port")
 	flag.StringVar(&secret, "pwd", "hongfeng", "deploy password")
-	flag.StringVar(&path, "path", "/deploy/wiki", "uri serve path")
+	flag.StringVar(&path, "path", "/deploy/github/code", "uri serve path")
 	flag.StringVar(&shell, "sh", "/app/w.sh", "deploy shell scritpt")
 	flag.BoolVar(&h, "h", false, "show this help")
 	flag.Usage = usage
@@ -117,6 +117,6 @@ func main() {
 	router := gin.Default()
 	router.GET("/", defaultPage)
 	router.POST(path, gitPush)
-	router.POST("/aliyun/code", gitPushCode)
+	router.POST("/deploy/aliyun/code", gitPushCode)
 	_ = router.Run(":" + port)
 }
