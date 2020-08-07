@@ -34,7 +34,7 @@ func gitPush(c *gin.Context) {
 	log.Info("Signatures is matched ~")
 	//return 200 first
 	c.String(http.StatusOK, "OK")
-	ReLaunch(shell)
+	go ReLaunch(shell)
 }
 
 // aliyun code
@@ -45,12 +45,17 @@ func gitPushCode(c *gin.Context) {
 
 // execute the shell scripts
 func ReLaunch(cmdStr string) {
-	cmd := exec.Command("sh", cmdStr)
+	log.Info(cmdStr)	
+	cmd := exec.Command("/bin/bash", cmdStr)
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	err = cmd.Wait()
+	if nil != err {
+		log.Info(err)
+	}
+	log.Info("ProcessState PID:", cmd.ProcessState.Pid())
 }
 
 // verifySignature
@@ -110,13 +115,14 @@ func main() {
 	// Logging to a file.
 	var f *os.File
 	f, _ = os.OpenFile("logs/gin.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	gin.DefaultWriter = io.MultiWriter(f)
+	// gin.DefaultWriter = io.MultiWriter(f)
 	// Use the following code if you need to write the logs to file and console at the same time.
-	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 
 	router := gin.Default()
 	router.GET("/", defaultPage)
 	router.POST(path, gitPush)
 	router.POST("/deploy/aliyun/code", gitPushCode)
 	_ = router.Run(":" + port)
+	
 }
